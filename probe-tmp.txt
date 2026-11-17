@@ -1,0 +1,2 @@
+<a href="x" title="y">it's 测试 &amp; 中文</a>
+line2
