@@ -3,68 +3,59 @@
 <head>
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-<title>小组作业 3 · 占位 · 课程作业</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-:root{ --bg:#0d0d0d;--card:#161616;--card2:#1c1c1c;--border:#2a2a2a; --primary:#58a6ff;--primary-dark:#1f3a5f;--primary-light:#79b8ff; --text:#f0f0f0;--text-muted:#888; --accent-bg:rgba(88,166,255,0.08); }
-body{font-family:'Noto Sans SC',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(88,166,255,0.25),transparent 55%),linear-gradient(180deg,#16202e 0%,#0d0d0d 100%);z-index:-1}
-.container{max-width:1100px;margin:0 auto;padding:0 24px}
-nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid var(--border);margin-bottom:40px;flex-wrap:wrap;gap:10px}
-nav .brand{font-family:'Rajdhani',sans-serif;font-size:1.25em;font-weight:700;letter-spacing:2px;color:var(--primary);display:flex;align-items:center;gap:10px}
-nav .brand::before{content:'';width:8px;height:24px;background:var(--primary)}
-nav .links{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-nav .links a{padding:6px 14px;border-radius:4px;font-size:0.88em;color:var(--text-muted);text-decoration:none}
-nav .links a.active{background:var(--primary);color:var(--bg);font-weight:600}
-nav .links a:hover:not(.active){color:var(--primary)}
-.hero{margin-bottom:44px}
-.hero .eyebrow{color:var(--primary);font-size:0.85em;letter-spacing:2px;margin-bottom:14px;text-transform:uppercase;font-family:'Rajdhani',sans-serif}
-.hero h1{font-family:'Rajdhani',sans-serif;font-size:2.6em;font-weight:700;line-height:1.25;margin-bottom:16px;letter-spacing:1px}
-.hero p.lead{font-size:1.02em;color:var(--text-muted);max-width:720px;margin-bottom:22px}
-.meta-row{display:flex;gap:10px;flex-wrap:wrap}
-.meta-chip{font-size:0.82em;padding:6px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text-muted)}
-.meta-chip b{color:var(--primary)}
-.doc-body{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:32px;margin-bottom:24px}
-.placeholder{border:1px dashed var(--border);border-radius:8px;padding:48px 24px;text-align:center;color:var(--text-muted)}
-.placeholder .icon{font-size:2em;margin-bottom:12px}
-.placeholder h2{font-family:'Rajdhani',sans-serif;font-size:1.4em;font-weight:700;color:var(--text);margin-bottom:8px}
-.placeholder p{font-size:0.9em}
-.note{background:var(--accent-bg);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:16px 20px;font-size:0.88em;color:var(--text-muted);margin-top:16px}
-.note b{color:var(--text)}
-footer{text-align:center;padding:30px 0;color:var(--text-muted);font-size:0.82em;border-top:1px solid var(--border);font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-top:40px}
-@media(max-width:900px){.hero h1{font-size:2em}.doc-body{padding:22px}}
-</style>
+<title>作业 3 · SyRS 与初始系统架构 · 线控底盘平台</title>
+<link rel='stylesheet' href='style.css'>
 </head>
 <body>
 <div class='container'>
 <nav>
 <div class='brand'>线控底盘平台 · 作业 3</div>
 <div class='links'>
-<a href='#' class='active'>作业 3</a>
+<a href='index.html' class='active'>概览</a>
+<a href='syrs.html'>SyRS</a>
+<a href='architecture.html'>初始架构</a>
+<a href='safety.html'>安全分析</a>
 <a href='../group1-chassis/index.html'>作业 1</a>
 <a href='../group2-brs-strs/index.html'>作业 2</a>
 <a href='../..'>返回首页</a>
 </div>
 </nav>
+
 <header class='hero'>
 <div class='eyebrow'>Complex Systems Engineering · Group Assignment 03</div>
-<h1>小组作业 3<br><span style='color:var(--text-muted)'>作业标题待补充</span></h1>
-<p class='lead'>本页面为占位骨架，沿用现有课程作业站点的深色主题。作业名称、背景、需求条目、场景与图表等待后续补充。</p>
+<h1>系统需求规格书 SyRS 与初始系统架构<br><span style='color:var(--text-muted)'>面向高级别自动驾驶的线控底盘平台</span></h1>
+<p class='lead'>承接作业 1 的六层系统结构与作业 2 的 BRS / StRS，本作业把业务与相关方需求转化为可实现、可验证的系统需求，给出初始系统架构与系统控制框图，并基于初始架构开展系统理论过程分析（STPA），导出安全需求与安全架构。需求框架参照 ISO/IEC/IEEE 29148:2018 第 5 章表 5.1 SyRS 范例轮廓。</p>
 <div class='meta-row'>
-<span class='meta-chip'>系统：<b>待补充</b></span>
-<span class='meta-chip'>截止：<b>待补充</b></span>
-<span class='meta-chip'>形式：<b>HTML 网页推送</b></span>
+<span class='meta-chip'>系统：<b>线控底盘平台</b></span>
+<span class='meta-chip'>截止：<b>2026-11-25 12:00</b></span>
+<span class='meta-chip'>标准：<b>29148 表 5.1</b></span>
+<span class='meta-chip'>方法：<b>STPA</b></span>
 </div>
 </header>
-<div class='doc-body'>
-<div class='placeholder'>
-<div class='icon'>📝</div>
-<h2>内容待补充</h2>
-<p>请在此处填入本次作业的正文、表格、系统树或场景说明。</p>
+
+<div class='entry-grid'>
+<a class='entry' href='syrs.html'>
+<div class='num'>PART 01</div>
+<h3>系统需求规格书 SyRS</h3>
+<p>按表 5.1 框架输出功能、性能、接口、运行模式、环境、信息安全与保障等系统级需求，编号 FR / PR / IF。</p>
+</a>
+<a class='entry' href='architecture.html'>
+<div class='num'>PART 02 / 03</div>
+<h3>初始系统架构与控制框图</h3>
+<p>逻辑分层与物理架构组成，以及 STPA 分层控制结构：控制器—执行器—受控过程—反馈回路。</p>
+</a>
+<a class='entry' href='safety.html'>
+<div class='num'>PART 04</div>
+<h3>安全需求与安全架构</h3>
+<p>STPA 事故 / 危害定义、不安全控制动作 UCA、导出的安全约束 SAFE-xx 与冗余安全架构措施。</p>
+</a>
+<a class='entry' href='../group1-chassis/index.html#tree'>
+<div class='num'>REFERENCE</div>
+<h3>作业 1 · 系统树</h3>
+<p>六层结构与六大系统、子系统、模块拆解，作为本作业架构与需求的溯源基础。</p>
+</a>
 </div>
-<div class='note'><b>占位说明：</b>本页结构与作业 1、作业 2 保持一致；后续可按章节继续追加 <code>.sec</code> 区块、表格与场景卡片。</div>
-</div>
+
 <footer><p>© 2026 金子惠 · 吉林大学汽车工程学院 · Complex Systems Engineering · Group Assignment 03</p></footer>
 </div>
 </body>
