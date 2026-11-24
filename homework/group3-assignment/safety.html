@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>安全需求与安全架构 · 作业 3</title>
+<link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<div class='container'>
+<nav>
+<div class='brand'>线控底盘平台 · 作业 3</div>
+<div class='links'>
+<a href='index.html'>概览</a>
+<a href='syrs.html'>SyRS</a>
+<a href='architecture.html'>初始架构</a>
+<a href='safety.html' class='active'>安全分析</a>
+<a href='../group1-chassis/index.html'>作业 1</a>
+<a href='../group2-brs-strs/index.html'>作业 2</a>
+<a href='../..'>返回首页</a>
+</div>
+</nav>
+
+<div class='section-head' id='safety'><div><div class='kicker'>PART 04</div><h2>安全需求与安全架构（STPA）</h2></div></div>
+<div class='doc-body'>
+
+<div class='sec'><h3><span class='num'>4.1</span>事故与危害定义</h3>
+<div class='two-col'>
+<div class='sub'><h4>事故（Accident）</h4><ul>
+<li><b>A-1</b> 车辆失控导致碰撞、剐蹭或人员伤害；</li>
+<li><b>A-2</b> 车辆发生非预期误动作（误转向 / 误制动 / 误加速）；</li>
+<li><b>A-3</b> 故障后车辆无法进入安全状态，滞留危险路面。</li>
+</ul></div>
+<div class='sub'><h4>系统危害（Hazard）</h4><ul>
+<li><b>H1</b> 转向能力丧失或转角错误；</li>
+<li><b>H2</b> 制动能力丧失或制动力错误；</li>
+<li><b>H3</b> 驱动扭矩错误（过量驱动 / 扭矩突增）；</li>
+<li><b>H4</b> 故障未被及时检测或未触发降级；</li>
+<li><b>H5</b> 冗余切换失败；</li>
+<li><b>H6</b> 指令超时 / 丢失后仍沿用旧指令盲目执行。</li>
+</ul></div>
+</div>
+</div>
+
+<div class='sec'><h3><span class='num'>4.2</span>不安全控制动作（UCA）</h3>
+<p>以底盘域控为控制器，按 STPA 四类不安全控制动作识别如下：</p>
+<table>
+<tr><th style='width:150px'>类别</th><th>不安全控制动作示例</th><th style='width:120px'>关联危害</th></tr>
+<tr><td><b>未提供所需动作</b></td><td>出现故障时未触发降级 / MRC；冗余失效后未由备用链路接管。</td><td><span class='tag warn'>H4 / H5</span></td></tr>
+<tr><td><b>提供错误动作</b></td><td>转角、扭矩、制动压力或悬架阻尼解算错误；输出超出安全范围的指令。</td><td><span class='tag warn'>H1 / H2 / H3</span></td></tr>
+<tr><td><b>动作时机不当</b></td><td>指令延迟、过早或过晚执行；高速工况误触发低速泊车策略。</td><td><span class='tag warn'>H1 / H3</span></td></tr>
+<tr><td><b>动作持续/停止不当</b></td><td>制动未及时解除；降级后未按条件恢复；冗余切换后仍保持主链路输出。</td><td><span class='tag warn'>H2 / H5</span></td></tr>
+</table>
+</div>
+
+<div class='sec'><h3><span class='num'>4.3</span>导出的安全需求（安全约束）</h3>
+<p>由 UCA 与危害反推得到系统必须满足的安全约束，编号 <b>SAFE-xx</b>，纳入 SyRS 并在架构中落实。</p>
+<table>
+<tr><th style='width:95px'>编号</th><th>安全需求 / 约束</th><th style='width:120px'>对应危害</th></tr>
+<tr><td><b>SAFE-01</b></td><td>域控须在 ≤ 10 ms 周期内完成传感器、执行器、电源与通信链路的自检与周期诊断。</td><td>H4</td></tr>
+<tr><td><b>SAFE-02</b></td><td>关键转向 / 制动链路须双冗余；单点失效后冗余切换 ≤ 50 ms，且仍能实现最小风险停车。</td><td>H1 / H2 / H5</td></tr>
+<tr><td><b>SAFE-03</b></td><td>制动须双回路独立，单回路失效时仍可产生规定减速度完成安全停车。</td><td>H2</td></tr>
+<tr><td><b>SAFE-04</b></td><td>检测到关键故障后须在限定时间内进入降级或 MRC；禁止带关键故障继续正常行驶。</td><td>H4 / H1 / H2</td></tr>
+<tr><td><b>SAFE-05</b></td><td>指令超时 / 心跳丢失时须进入安全状态（减速或停车），不得沿用最后指令盲目执行。</td><td>H6</td></tr>
+<tr><td><b>SAFE-06</b></td><td>独立安全监控单元（看门狗 / 安全 MCU）监督主计算，超时或异常时强制进入安全状态。</td><td>H4 / H5</td></tr>
+<tr><td><b>SAFE-07</b></td><td>驱动扭矩受 BMS 与高压绝缘状态约束；绝缘或高压故障时切断驱动扭矩。</td><td>H3</td></tr>
+<tr><td><b>SAFE-08</b></td><td>所有故障事件与安全动作须写入可追溯日志，支持事后复盘与责任界定。</td><td>H4 / H6</td></tr>
+<tr><td><b>SAFE-09</b></td><td>冗余切换、降级与 MRC 策略须经故障注入测试验证有效。</td><td>H5 / H4</td></tr>
+<tr><td><b>SAFE-10</b></td><td>OTA 刷写失败或校验不通过时，须回滚至上一安全版本，不得运行未经验证的软件。</td><td>H4</td></tr>
+</table>
+</div>
+
+<div class='sec'><h3><span class='num'>4.4</span>安全架构措施</h3>
+<table>
+<tr><th style='width:140px'>冗余 / 监督层级</th><th>安全架构措施</th><th style='width:130px'>落实安全需求</th></tr>
+<tr><td><b>计算冗余</b></td><td>SoC + 锁步安全 MCU 双通道对比；独立看门狗监控主计算，异常触发安全状态。</td><td>SAFE-06</td></tr>
+<tr><td><b>电源冗余</b></td><td>双 12V / 48V 主备电源，主电源失效时备用电源短时供电保障停车动作。</td><td>SAFE-02</td></tr>
+<tr><td><b>通信冗余</b></td><td>CAN FD 双总线 / 以太网双通道，单链路失效后备用链路维持关键指令传输。</td><td>SAFE-02 / SAFE-05</td></tr>
+<tr><td><b>传感器冗余</b></td><td>转角、扭矩、轮速、压力双采样，IMU 冗余；交叉比对识别传感器失效。</td><td>SAFE-01 / SAFE-02</td></tr>
+<tr><td><b>执行冗余</b></td><td>双绕组转向电机、双制动回路与冗余蓄能器；单点执行器失效仍有备用执行通道。</td><td>SAFE-02 / SAFE-03</td></tr>
+<tr><td><b>状态机监督</b></td><td>正常 / 降级 / MRC / 驻车状态机管理模式切换，故障分级触发对应安全动作。</td><td>SAFE-04 / SAFE-05</td></tr>
+<tr><td><b>软件与版本安全</b></td><td>按 ASIL-D 相关要求开发，软件分区隔离；OTA 校验失败自动回滚。</td><td>SAFE-10</td></tr>
+</table>
+</div>
+
+<div class='sec'><h3><span class='num'>4.5</span>安全架构框图</h3>
+<div class='arch'>
+<div class='exec-row'>
+<div class='box'><div class='bt'>主计算通道</div><div class='bd'>SoC 主控制</div></div>
+<div class='box'><div class='bt'>安全计算通道</div><div class='bd'>锁步 MCU / 监控</div></div>
+</div>
+<div class='arrow-v'>↓<span class='al'>双通道结果比对 · 看门狗监督</span></div>
+<div class='box ctrl'><div class='bt'>冗余执行层</div><div class='bd'>双绕组转向电机 · 双制动回路 · 冗余蓄能器 · 双电源 · 双总线</div></div>
+<div class='arrow-v'>↓<span class='al'>安全动作 / 降级 / MRC</span></div>
+<div class='box proc'><div class='bt'>受控车辆过程</div><div class='bd'>单点失效不丧失基本转向 / 制动能力，可进入可控安全状态</div></div>
+</div>
+</div>
+</div>
+
+<div class='section-head'><div><div class='kicker'>APPENDIX</div><h2>附录 · 缩写与缩略语</h2></div></div>
+<div class='doc-body'>
+<table>
+<tr><th style='width:160px'>缩写</th><th>全称 / 含义</th></tr>
+<tr><td><b>SyRS</b></td><td>System Requirements Specification，系统需求规格说明</td></tr>
+<tr><td><b>STPA</b></td><td>Systems-Theoretic Process Analysis，系统理论过程分析</td></tr>
+<tr><td><b>UCA</b></td><td>Unsafe Control Action，不安全控制动作</td></tr>
+<tr><td><b>CDC</b></td><td>Chassis Domain Controller，底盘域控制器</td></tr>
+<tr><td><b>SbW / BBW / DbW</b></td><td>线控转向 / 线控制动 / 线控驱动（Steer / Brake / Drive-by-Wire）</td></tr>
+<tr><td><b>EHB / EMB</b></td><td>电子液压制动 / 电子机械制动</td></tr>
+<tr><td><b>VDC / ESP</b></td><td>车辆动态控制 / 电子稳定程序</td></tr>
+<tr><td><b>ASIL</b></td><td>Automotive Safety Integrity Level，汽车安全完整性等级</td></tr>
+<tr><td><b>MRC</b></td><td>Minimal Risk Condition，最小风险状态</td></tr>
+<tr><td><b>OTA</b></td><td>Over-The-Air，远程在线升级</td></tr>
+<tr><td><b>BMS</b></td><td>Battery Management System，电池管理系统</td></tr>
+</table>
+</div>
+
+<footer><p>© 2026 金子惠 · 吉林大学汽车工程学院 · Complex Systems Engineering · Group Assignment 03</p></footer>
+</div>
+</body>
+</html>
