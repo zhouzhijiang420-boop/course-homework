@@ -3,7 +3,7 @@
 <head>
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-<title>作业 3 · SyRS 与初始系统架构 · 线控底盘平台</title>
+<title>SyRS 与初始系统架构 · 线控底盘平台 · 作业 3</title>
 <link rel='stylesheet' href='style.css'>
 </head>
 <body>
@@ -11,9 +11,8 @@
 <nav>
 <div class='brand'>线控底盘平台 · 作业 3</div>
 <div class='links'>
-<a href='index.html' class='active'>概览</a>
-<a href='syrs.html'>SyRS</a>
-<a href='architecture.html'>初始架构</a>
+<a href='#syrs' class='active'>SyRS</a>
+<a href='#arch'>初始架构</a>
 <a href='../group1-chassis/index.html'>作业 1</a>
 <a href='../group2-brs-strs/index.html'>作业 2</a>
 <a href='../..'>返回首页</a>
@@ -23,7 +22,7 @@
 <header class='hero'>
 <div class='eyebrow'>Complex Systems Engineering · Group Assignment 03</div>
 <h1>系统需求规格书 SyRS 与初始系统架构<br><span style='color:var(--text-muted)'>面向高级别自动驾驶的线控底盘平台</span></h1>
-<p class='lead'>承接作业 1 的六层系统结构与作业 2 的 BRS / StRS，本作业把业务与相关方需求转化为可实现、可验证的系统需求，并给出初始系统架构。需求框架参照 ISO/IEC/IEEE 29148:2018 第 5 章表 5.1 SyRS 范例轮廓。</p>
+<p class='lead'>承接作业 1 的六层结构与作业 2 的 BRS / StRS，把业务与相关方需求转化为可实现、可验证的系统需求，并给出初始系统架构。框架参照 ISO/IEC/IEEE 29148:2018 表 5.1 SyRS 范例轮廓。</p>
 <div class='meta-row'>
 <span class='meta-chip'>系统：<b>线控底盘平台</b></span>
 <span class='meta-chip'>截止：<b>2026-11-25 12:00</b></span>
@@ -31,22 +30,145 @@
 </div>
 </header>
 
-<div class='entry-grid'>
-<a class='entry' href='syrs.html'>
-<div class='num'>PART 01</div>
-<h3>系统需求规格书 SyRS</h3>
-<p>按表 5.1 框架输出功能、性能、接口、运行模式、环境、信息安全与保障等系统级需求，编号 FR / PR / IF。</p>
-</a>
-<a class='entry' href='architecture.html'>
-<div class='num'>PART 02</div>
-<h3>初始系统架构</h3>
-<p>逻辑分层与物理架构组成，明确决策、计算、执行、反馈各层职责与六大系统构成。</p>
-</a>
-<a class='entry' href='../group1-chassis/index.html#tree'>
-<div class='num'>REFERENCE</div>
-<h3>作业 1 · 系统树</h3>
-<p>六层结构与六大系统、子系统、模块拆解，作为本作业架构与需求的溯源基础。</p>
-</a>
+<div class='section-head' id='syrs'><div><div class='kicker'>PART 01</div><h2>系统需求规格书 SyRS（表 5.1）</h2></div></div>
+<div class='doc-body'>
+
+<div class='sec'><h3><span class='num'>1.</span>概述</h3>
+<div class='sub'><h4>1.1 系统目的</h4><p>线控底盘平台作为高级别自动驾驶整车的执行层，接收智驾大脑的规划轨迹与运动指令，无机械连接地完成转向、制动、驱动与悬架控制，把驾驶意图毫秒级、安全、平顺地翻译为车轮运动；单点故障下仍能进入可控的最小风险状态，支撑城市载客、干线物流、无人配送与自动泊车等场景落地。</p></div>
+<div class='sub'><h4>1.2 系统范围</h4>
+<ul>
+<li><b>纳入：</b>SbW、BBW、DbW、主动悬架、底盘域控制器、冗余安全系统的系统级需求，及外部接口、运行模式、性能、环境与安全需求。</li>
+<li><b>排除：</b>环境感知、决策与轨迹规划算法（上游智驾系统）；车身结构与内外饰；动力电池本体研发。</li>
+<li><b>外部实体：</b>智驾大脑、高精定位与 V2X、OEM、车队运营商、远程安全员、零部件供应商、监管认证机构、售后维保。</li>
+</ul></div>
+<div class='sub'><h4>1.3 系统概述</h4><p>平台处于「决策」与「车轮」之间：上游接入轨迹、定位与车路协同信息；中游由域控统一解算并协调四大执行系统与冗余单元；下游面向整车集成、运营与维保。六层结构见 <a href='../group1-chassis/index.html#tree'>作业 1 系统树</a>，相关方诉求见 <a href='../group2-brs-strs/index.html#stakeholders'>作业 2 StRS</a>。</p></div>
+</div>
+
+<div class='sec'><h3><span class='num'>2.</span>功能需求（Functional Requirements）</h3>
+<p>将作业 2 相关方需求（SR-xx）分解为系统功能，编号 <b>FR-xx</b>。</p>
+<table>
+<tr><th style='width:90px'>编号</th><th style='width:170px'>功能</th><th>功能描述</th><th style='width:150px'>溯源相关方需求</th></tr>
+<tr><td><b>FR-01</b></td><td>指令接收与解析</td><td>接收上游轨迹、目标车速/横摆/转角/扭矩/制动力指令及驾驶模式，完成校验、解析与时序对齐。</td><td>SR-01</td></tr>
+<tr><td><b>FR-02</b></td><td>运动解算</td><td>基于动力学模型与车辆状态，解算各执行器目标转角、驱动扭矩、制动压力与悬架阻尼/车高。</td><td>SR-01 / SR-09</td></tr>
+<tr><td><b>FR-03</b></td><td>线控转向控制</td><td>控制前/后轴转向电机跟踪目标转角，支持可变传动比与后轮转向，并提供路感反馈。</td><td>SR-01 / SR-04</td></tr>
+<tr><td><b>FR-04</b></td><td>线控制动控制</td><td>EHB 常规制动与 EMB 四轮独立制动协调动作，并与驱动侧完成能量回收协同。</td><td>SR-01 / SR-03</td></tr>
+<tr><td><b>FR-05</b></td><td>线控驱动控制</td><td>前后轴电机扭矩分配与扭矩矢量控制，执行牵引力控制，并受 BMS 与高压状态约束。</td><td>SR-01 / SR-06</td></tr>
+<tr><td><b>FR-06</b></td><td>主动悬架控制</td><td>按工况与预瞄路面调节空气弹簧刚度/车高与 CDC 阻尼，兼顾舒适与操控，为传感器提供稳定基座。</td><td>SR-04</td></tr>
+<tr><td><b>FR-07</b></td><td>稳定性控制</td><td>运行 VDC / ESP 横摆与侧滑控制，在低附着、极限工况下维持车辆稳定。</td><td>SR-04 / SR-07</td></tr>
+<tr><td><b>FR-08</b></td><td>状态监控与诊断</td><td>实时监测传感器、执行器、电源、通信与计算链路状态，定位故障并分级。</td><td>SR-03 / SR-05 / SR-08</td></tr>
+<tr><td><b>FR-09</b></td><td>失效降级与 MRC</td><td>按故障等级触发冗余切换、限速降级或最小风险策略：自主靠边减速停车并告警。</td><td>SR-03 / SR-05 / SR-07</td></tr>
+<tr><td><b>FR-10</b></td><td>诊断与数据记录</td><td>生成故障码，记录运行与故障日志、标定参数，支持回读与远程上报。</td><td>SR-08 / SR-03</td></tr>
+<tr><td><b>FR-11</b></td><td>OTA 升级与回滚</td><td>支持软件与标定参数远程下载、校验、刷写，失败或校验不通过时回滚至上一安全版本。</td><td>SR-09</td></tr>
+<tr><td><b>FR-12</b></td><td>上电与出车自检</td><td>上电及出车前完成各子系统自检与状态确认，自检不通过不得进入正常模式。</td><td>SR-07 / SR-08</td></tr>
+</table>
+</div>
+
+<div class='sec'><h3><span class='num'>3.</span>易用性需求（Usability）</h3>
+<ul>
+<li><b>乘坐品质：</b>加减速与转向平顺，纵向加速度变化率与侧向加速度受限，保证乘客舒适。</li>
+<li><b>可诊断性：</b>维保人员可通过标准诊断接口快速读取状态与故障定位，关键部件可更换。</li>
+<li><b>可监控性：</b>运营端与远程安全员可直观获取车辆状态、故障等级与告警，含义明确无歧义。</li>
+</ul>
+</div>
+
+<div class='sec'><h3><span class='num'>4.</span>性能需求（Performance）</h3>
+<table>
+<tr><th style='width:90px'>编号</th><th style='width:180px'>性能项</th><th>指标要求</th><th style='width:170px'>验证方式</th></tr>
+<tr><td><b>PR-01</b></td><td>端到端控制延迟</td><td>指令接收到执行器输出响应，端到端延迟 <b>≤ 20 ms</b>。</td><td>台架闭环 + 时延测量</td></tr>
+<tr><td><b>PR-02</b></td><td>转角跟踪精度</td><td>前轮目标转角跟踪误差 <b>≤ ±0.1°</b>；后轮转角按策略精确跟随。</td><td>转向台架 + 实车测试</td></tr>
+<tr><td><b>PR-03</b></td><td>执行器响应时间</td><td>扭矩 / 制动压力级响应 <b>≤ 10 ms</b>；域控闭环周期 5–10 ms。</td><td>台架阶跃响应测试</td></tr>
+<tr><td><b>PR-04</b></td><td>冗余切换时间</td><td>主链路失效后冗余接管 <b>≤ 50 ms</b>，期间不丧失基本转向/制动能力。</td><td>故障注入测试</td></tr>
+<tr><td><b>PR-05</b></td><td>乘坐品质</td><td>纵向/侧向加速度及其变化率满足标定阈值，兼顾舒适与操控。</td><td>乘坐品质试验 + 标定评审</td></tr>
+<tr><td><b>PR-06</b></td><td>运行可用率</td><td>关键故障可及时识别与上报，可用率满足车队运营目标。</td><td>运营数据统计 + 日志审查</td></tr>
+<tr><td><b>PR-07</b></td><td>适配范围</td><td>可适配至少两类整车（乘用车 / 商用车），安装接口与标定参数可配置。</td><td>车型适配评审 + 环境试验</td></tr>
+</table>
+</div>
+
+<div class='sec'><h3><span class='num'>5.</span>系统接口需求（Interfaces）</h3>
+<table>
+<tr><th style='width:150px'>接口</th><th style='width:130px'>对接实体</th><th>接口内容与信号</th><th style='width:130px'>介质 / 协议</th></tr>
+<tr><td><b>上游规控接口</b></td><td>自动驾驶大脑</td><td>轨迹点、目标车速/横摆/转角/扭矩/制动指令、驾驶模式；回传车辆状态与执行反馈。</td><td>以太网 / CAN FD</td></tr>
+<tr><td><b>定位与 V2X</b></td><td>定位单元、V2X 路侧</td><td>定位与路况信息输入，供轨迹跟踪与稳定性控制参考。</td><td>车载网络 / 以太网</td></tr>
+<tr><td><b>内部执行接口</b></td><td>SbW/BBW/DbW/悬架</td><td>目标转角、扭矩、压力、阻尼/车高指令；电机电流、位置、温度、压力反馈。</td><td>CAN FD / 局域总线</td></tr>
+<tr><td><b>诊断运维接口</b></td><td>诊断工具、云端</td><td>故障码、状态量、运行/故障日志、标定参数读写与版本信息。</td><td>UDS / 诊断总线 + 云端</td></tr>
+<tr><td><b>远程监控接口</b></td><td>运营端、远程安全员</td><td>车辆状态、分级告警、故障摘要上报；接收远程接管配合指令。</td><td>无线链路 + 云端</td></tr>
+<tr><td><b>高压能源接口</b></td><td>动力电池 / BMS</td><td>扭矩受限与功率约束、绝缘与高压状态反馈、能量回收协调。</td><td>内部总线 + 高压线束</td></tr>
+</table>
+</div>
+
+<div class='sec'><h3><span class='num'>6.</span>系统运行（Operations）</h3>
+<ul>
+<li><b>SP-01 指令接收：</b>接收轨迹、目标指令与车辆状态反馈，完成校验与时序对齐。</li>
+<li><b>SP-02 决策解算：</b>域控基于动力学模型解算各执行器目标量，运行稳定性策略。</li>
+<li><b>SP-03 协同执行：</b>协调转向、制动、驱动、悬架执行，优化稳定性与平顺性。</li>
+<li><b>SP-04 状态监控：</b>实时监测各链路状态，进行故障诊断与分级。</li>
+<li><b>SP-05 降级与告警：</b>按故障等级触发冗余切换、降级或 MRC，并向运营端上报。</li>
+</ul>
+</div>
+
+<div class='sec'><h3><span class='num'>7.</span>系统模式与状态（Modes）</h3>
+<table>
+<tr><th style='width:150px'>运行模式</th><th>触发条件</th><th>系统行为</th></tr>
+<tr><td><b>自检模式</b></td><td>上电 / 出车前</td><td>各子系统自检与状态确认；不通过则锁定，不进入正常模式。</td></tr>
+<tr><td><b>正常模式</b></td><td>自检通过、各链路无故障</td><td>全功能闭环执行，跟踪规划轨迹。</td></tr>
+<tr><td><b>降级模式</b></td><td>非关键故障或冗余切换</td><td>限制车速/功能范围，维持可控行驶并上报。</td></tr>
+<tr><td><b>最小风险 MRC</b></td><td>关键链路失效、无法继续安全行驶</td><td>自主靠边减速停车，开启警示，等待远程介入。</td></tr>
+<tr><td><b>驻车模式</b></td><td>到达目的地、泊车完成或运营结束</td><td>施加驻车制动，关闭动态执行，进入低功耗待命。</td></tr>
+</table>
+</div>
+
+<div class='sec'><h3><span class='num'>8.</span>物理特性与环境条件</h3>
+<ul>
+<li>执行器与域控满足整车布置空间、安装接口与整备质量约束，平台化部件多车型复用。</li>
+<li>工作温度、振动、冲击、防护等级满足车规条件；适应晴雨、冰雪、低附着与高低温环境。</li>
+<li>供电电压波动、电磁兼容满足车载电气环境；高压部件满足电气间隙、爬电距离与绝缘隔离要求。</li>
+</ul>
+</div>
+
+<div class='sec'><h3><span class='num'>9.</span>信息安全与信息管理</h3>
+<ul>
+<li>控制指令与诊断通信具备身份鉴别、完整性校验与防篡改能力；诊断与 OTA 通道需访问控制与安全刷写。</li>
+<li>统一管理运行数据、故障日志、标定参数与软件/标定版本，保证可追溯、可回滚；变更走配置管理并留痕。</li>
+<li>运行与故障数据按安全要求存储传输，日志时间戳与车辆配置一一对应，支持复盘与责任界定。</li>
+</ul>
+</div>
+
+<div class='sec'><h3><span class='num'>10.</span>法规、保障与约束</h3>
+<ul>
+<li><b>法规：</b>满足车辆准入、功能安全（ISO 26262）与预期功能安全（ISO 21448 / SOTIF）及数据安全、远程监管相关要求，证据可追溯。</li>
+<li><b>保障：</b>运营期提供远程监控、在线诊断、保养提醒、备件与维修支持；软件缺陷经 OTA 修复并可回滚；退役时完成部件回收与数据清除。</li>
+<li><b>约束：</b>冗余配置控制在整车成本目标内；需求基线、适配、测试认证与投放节点按计划锁定；受研发算力、台架、场地与供应链产能约束。</li>
+<li><b>假设与依赖：</b>假设上游按约定接口输出有效指令；依赖 BMS 电池约束、定位信息与云端 OTA/监控后台；性能受整车动力、电池与传感器配置约束。</li>
+</ul>
+</div>
+</div>
+
+<div class='section-head' id='arch'><div><div class='kicker'>PART 02</div><h2>初始系统架构（Initial System Architecture）</h2></div></div>
+<div class='doc-body'>
+<div class='sec'>
+<h3><span class='num'>1.</span>逻辑架构分层</h3>
+<p>按「决策 — 计算 — 执行 — 反馈」划分逻辑层次，明确各层职责与交互边界。</p>
+<div class='layers'>
+<div class='layer'><div class='lt'>L1 上游决策层</div><div class='ld'><b>自动驾驶大脑（感知 / 决策 / 规划）</b>、高精定位、V2X。输出规划轨迹与运动指令，不参与底盘闭环控制。</div></div>
+<div class='layer'><div class='lt'>L2 域控计算层</div><div class='ld'><b>底盘域控制器 CDC</b>：SoC + 安全 MCU + 网关；运行运动解算、VDC/ESP、轨迹跟踪与状态监控策略。</div></div>
+<div class='layer'><div class='lt'>L3 执行层</div><div class='ld'><b>SbW 转向 / BBW 制动 / DbW 驱动 / 主动悬架</b>四大执行子系统，按域控指令完成车轮运动调节。</div></div>
+<div class='layer'><div class='lt'>L4 感知反馈层</div><div class='ld'><b>传感器组</b>：轮速、转角、扭矩、制动压力、IMU、悬架状态等，向域控闭环反馈车辆状态。</div></div>
+</div>
+</div>
+<div class='sec'>
+<h3><span class='num'>2.</span>物理架构组成</h3>
+<p>物理架构由作业 1 拆解的六大系统构成，子系统与模块划分保持一致：</p>
+<table>
+<tr><th style='width:170px'>系统</th><th>主要子系统 / 模块</th></tr>
+<tr><td><b>线控转向 SbW</b></td><td>前/后轴转向执行电机与传动机构、路感反馈子系统、角度/扭矩传感器组。</td></tr>
+<tr><td><b>线控制动 BBW</b></td><td>EHB（主缸模拟器 + 轮缸调压阀）、EMB（四轮卡钳电机 + 驻车执行器）、制动冗余单元（蓄能器 + 隔离阀）。</td></tr>
+<tr><td><b>线控驱动 DbW</b></td><td>前/后轴电机控制器与扭矩分配、BMS 能量管理与高压配电、制动能量回收。</td></tr>
+<tr><td><b>主动悬架</b></td><td>空气弹簧单元、CDC 可变阻尼减振器、悬架控制器。</td></tr>
+<tr><td><b>底盘域控制器</b></td><td>计算平台（SoC + 安全 MCU + 网关）、决策算法（VDC / ESP / 轨迹跟踪）。</td></tr>
+<tr><td><b>冗余安全系统</b></td><td>双电源冗余、双总线通信冗余、功能安全监控单元（看门狗 / 独立 MCU）。</td></tr>
+</table>
+<div class='note'><b>架构说明：</b>初始架构以「集中式域控 + 分布式执行器」为基线，预留算力与接口扩展空间；详细子系统树见 <a href='../group1-chassis/index.html#tree'>作业 1 系统树</a>。</div>
+</div>
 </div>
 
 <footer><p>© 2026 金子惠 · 吉林大学汽车工程学院 · Complex Systems Engineering · Group Assignment 03</p></footer>
