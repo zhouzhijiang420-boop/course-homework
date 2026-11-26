@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>场景分层与典型场景论述 · 线控底盘平台 · 作业 4</title>
+<link rel='stylesheet' href='style.css'>
+</head>
+<body>
+<div class='container'>
+<nav>
+<div class='brand'>线控底盘平台 · 作业 4</div>
+<div class='links'>
+<a href='#layers' class='active'>场景分层</a>
+<a href='#elements'>场景要素</a>
+<a href='#odd'>运行条件</a>
+<a href='#case'>典型场景</a>
+<a href='../group1-chassis/index.html'>作业 1</a>
+<a href='../group2-brs-strs/index.html'>作业 2</a>
+<a href='../group3-assignment/index.html'>作业 3</a>
+<a href='../..'>返回首页</a>
+</div>
+</nav>
+
+<header class='hero'>
+<div class='eyebrow'>Complex Systems Engineering · Group Assignment 04</div>
+<h1>场景分层、场景要素与典型场景论述<br><span style='color:var(--text-muted)'>面向高级别自动驾驶的线控底盘平台</span></h1>
+<p class='lead'>围绕平台所处运行环境，先进行场景分层并梳理各层场景要素，再设定系统正常运行的运行设计条件（运行设计范围、系统状态、人员状态），最后选取一个典型场景进行详细论述。场景划分参照 SOTIF 由粗到细的场景工程方法。</p>
+<div class='meta-row'>
+<span class='meta-chip'>系统：<b>线控底盘平台</b></span>
+<span class='meta-chip'>主题：<b>场景分层与 ODD</b></span>
+<span class='meta-chip'>方法：<b>SOTIF 场景分层</b></span>
+</div>
+</header>
+
+<div class='section-head' id='layers'><div><div class='kicker'>PART 01</div><h2>场景分层（Scenario Layering）</h2></div></div>
+<div class='doc-body'>
+<div class='sec'>
+<p>按抽象程度由粗到细，把平台所处环境划分为四个层级：上层定义可运行的大环境，下层逐步收敛到可直接用于仿真、台架与实车测试的单个实例。</p>
+<table>
+<tr><th style='width:150px'>层级</th><th style='width:170px'>名称</th><th>抽象粒度与含义</th><th>本平台示例</th></tr>
+<tr><td><b>L1 宏观场景</b></td><td>ODD 大类</td><td>按运营区域与道路类型划分的大类，界定系统可运行的大环境边界。</td><td>城市道路、高速/快速路、园区与泊车、特殊天气环境。</td></tr>
+<tr><td><b>L2 功能场景</b></td><td>典型任务场景</td><td>用自然语言描述的典型驾驶任务，关注「做什么动作」。</td><td>跟车巡航、变道绕行、路口通行、起步停车、泊车入位、紧急避让。</td></tr>
+<tr><td><b>L3 逻辑场景</b></td><td>要素范围组合</td><td>在功能场景下用各要素的取值范围与分布刻画的一类场景。</td><td>车速 0–60 km/h、附着系数 0.3–0.9、弯道曲率与车距区间的组合。</td></tr>
+<tr><td><b>L4 具体场景</b></td><td>单一场景实例</td><td>所有要素参数确定的单个实例，可直接执行与复现。</td><td>晴白天、干燥沥青、车速 40 km/h、前车 15 m 减速的跟车避让。</td></tr>
+</table>
+</div>
+</div>
+
+<div class='section-head' id='elements'><div><div class='kicker'>PART 02</div><h2>场景要素（Scenario Elements）</h2></div></div>
+<div class='doc-body'>
+<div class='sec'>
+<p>各分层场景由以下六类要素组合而成；要素取值随层级由「范围/分布」逐步收敛为「确定值」。</p>
+<table>
+<tr><th style='width:150px'>要素类别</th><th style='width:230px'>具体要素</th><th>说明与典型取值</th></tr>
+<tr><td><b>道路要素</b></td><td>道路等级、车道数与宽度、曲率/坡度、路面附着、标线、路口与匝道</td><td>区分直道、缓弯、急弯；记录路面类型、附着系数与道路结构约束。</td></tr>
+<tr><td><b>交通参与者</b></td><td>前车/邻车道车辆、行人、非机动车、静止障碍物</td><td>记录相对距离、相对速度、运动轨迹与行为意图。</td></tr>
+<tr><td><b>环境要素</b></td><td>天气、光照、环境温度、横风、路面湿滑/结冰</td><td>晴/雨/雪/雾；昼间/夜间/逆光；温度与能见度影响感知与附着。</td></tr>
+<tr><td><b>车辆与底盘状态</b></td><td>车速、纵/横向加速度、转向角、载荷分布、胎压、子系统与冗余状态</td><td>刻画车辆当前运动状态与底盘各系统、冗余链路是否在线可用。</td></tr>
+<tr><td><b>任务目标要素</b></td><td>行程目标、期望车速、驾驶模式、车距/时距目标</td><td>上游规划给定的任务意图与控制目标，底盘据此跟踪执行。</td></tr>
+<tr><td><b>人员要素</b></td><td>车内乘客状态、远程安全员待命状态、运营/维保人员介入状态</td><td>明确谁在什么环节介入，及各方当前的职责与可操作权限。</td></tr>
+</table>
+</div>
+</div>
+
+<div class='section-head' id='odd'><div><div class='kicker'>PART 03</div><h2>运行设计条件（Operational Design Conditions）</h2></div></div>
+<div class='doc-body'>
+<div class='sec'>
+<div class='sub'>
+<h4>3.1 运行设计范围（ODD 范围）</h4>
+<table>
+<tr><th style='width:150px'>维度</th><th>正常运行设计范围</th></tr>
+<tr><td><b>道路</b></td><td>城市铺装道路、高速/快速路、园区道路；含直道、缓弯、路口与匝道；不含非铺装越野路面。</td></tr>
+<tr><td><b>车速</b></td><td>城市段 0–60 km/h、快速路段按限速运行；紧急避让工况覆盖低速至中速区间。</td></tr>
+<tr><td><b>路面附着</b></td><td>干燥沥青/混凝土 μ ≥ 0.6；湿滑路面 μ ≥ 0.3；冰雪等更低附着进入降级限速范围。</td></tr>
+<tr><td><b>环境</b></td><td>晴/多云/小雨；昼间或良好照明夜间；环境温度 0–35 ℃；能见度满足感知系统要求。</td></tr>
+<tr><td><b>交通流</b></td><td>混合交通流，车辆间距与密度处于感知与决策可处理范围内。</td></tr>
+<tr><td><b>载荷</b></td><td>额定载客/载货范围内，载荷分布在标定允许区间内。</td></tr>
+</table>
+</div>
+<div class='sub'>
+<h4>3.2 系统状态</h4>
+<ul>
+<li>上电自检通过，处于<b>正常模式</b>；SbW、BBW、DbW、主动悬架、底盘域控全部在线且无故障。</li>
+<li>双电源、双总线与功能安全监控等<b>冗余链路可用</b>；软件与标定版本为已发布基线。</li>
+<li>高压与电量满足当前行程；各传感器与执行器工作在有效量程内。</li>
+</ul>
+</div>
+<div class='sub'>
+<h4>3.3 人员状态</h4>
+<ul>
+<li>车内为<b>乘客</b>，无专职驾驶员（L4 自动驾驶），乘客不参与驾驶操作。</li>
+<li><b>远程安全员</b>在监控端待命，可在告警时介入；运营人员掌握全队车辆状态。</li>
+<li><b>维保人员</b>负责出车前自检与车况确认，运行期不直接干预动态控制。</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class='section-head' id='case'><div><div class='kicker'>PART 04</div><h2>典型场景详细论述</h2></div></div>
+<div class='doc-body'>
+<div class='sec'>
+<h3><span class='num'>1.</span>场景选取与背景目标</h3>
+<p>选取<b>城市主干道跟车巡航 — 前车减速、前方出现静止障碍物，底盘执行制动减速与车道内轻微避让修正</b>作为典型场景。该场景同时调用转向、制动、驱动与悬架四类执行子系统，能集中体现线控底盘的协同控制与稳定性保持能力。</p>
+<p><b>场景背景：</b>本车在城市主干道以 40 km/h 直行跟车；前车因路口情况减速，其前方出现一辆静止违停车辆。上游决策规划生成减速目标，并在本车道内给出小幅横向避让修正轨迹。<b>目标：</b>底盘平顺、稳定地完成减速与方向修正，不追尾、不越线，保证乘坐舒适，全过程闭环可控。</p>
+</div>
+
+<div class='sec'>
+<h3><span class='num'>2.</span>初始条件（要素取值）</h3>
+<table>
+<tr><th style='width:150px'>要素</th><th>取值</th></tr>
+<tr><td><b>道路</b></td><td>城市主干道、单向多车道、干燥沥青、平直缓弯，标线清晰。</td></tr>
+<tr><td><b>环境</b></td><td>白天晴天，光照良好，能见度充足，横风可忽略。</td></tr>
+<tr><td><b>车辆与底盘</b></td><td>本车 40 km/h；前车由 35 km/h 减速；障碍静止于前方；附着 μ ≈ 0.8；额定乘员，胎压正常。</td></tr>
+<tr><td><b>系统状态</b></td><td>自检通过、正常模式；各执行子系统与冗余链路在线可用。</td></tr>
+<tr><td><b>人员状态</b></td><td>车内乘客；远程安全员待命，无人工接管操作。</td></tr>
+</table>
+</div>
+
+<div class='sec'>
+<h3><span class='num'>3.</span>事件时序与底盘动作</h3>
+<div class='steps'>
+<div class='step'><div class='st'>S1 巡航跟车</div><div class='sd'><b>上游：</b>维持目标车速与安全车距，保持当前轨迹。<b>底盘：</b>DbW 维持驱动扭矩，悬架采用舒适阻尼；轮速、转角、IMU 持续闭环反馈车辆状态。</div></div>
+<div class='step'><div class='st'>S2 预警识别</div><div class='sd'><b>上游：</b>传来前车减速与前方障碍信息。<b>底盘：</b>域控预瞄并计算所需减速度与可避让空间；提前降低驱动扭矩，制动系统完成建压预备。</div></div>
+<div class='step'><div class='st'>S3 指令下达</div><div class='sd'><b>上游：</b>规划输出减速目标与小幅横向修正轨迹。<b>域控：</b>解算目标减速度、前轮转角与前后轴扭矩分配，下发各执行子系统。</div></div>
+<div class='step'><div class='st'>S4 协同执行</div><div class='sd'><b>BBW</b> 四轮协调建压减速，并与能量回收协同；<b>DbW</b> 退出驱动、回收扭矩，必要时扭矩矢量分配；<b>SbW</b> 跟踪小幅转向角；<b>悬架</b>调节阻尼抑制俯仰与侧倾；传感器实时反馈滑移率与转角。</div></div>
+<div class='step'><div class='st'>S5 稳定跟踪</div><div class='sd'>车速与横向位置收敛到新轨迹；VDC/ESP 监视横摆与侧滑，必要时修正各轮制动力；反馈闭环持续维持车辆稳定。</div></div>
+<div class='step'><div class='st'>S6 恢复 / 停车</div><div class='sd'>障碍解除后恢复跟车巡航；若无法安全绕行，则减速至停稳、施加驻车制动，保持最小风险状态并等待远程介入。</div></div>
+</div>
+</div>
+
+<div class='sec'>
+<h3><span class='num'>4.</span>各执行子系统动作小结</h3>
+<table>
+<tr><th style='width:170px'>子系统</th><th>本场景中的具体动作</th></tr>
+<tr><td><b>线控转向 SbW</b></td><td>按规划轨迹输出小幅前轮转角，后轮按策略跟随；转角跟踪误差 ≤ ±0.1°。</td></tr>
+<tr><td><b>线控制动 BBW</b></td><td>EHB / EMB 协调建压完成减速，制动与能量回收协同；保留冗余制动能力。</td></tr>
+<tr><td><b>线控驱动 DbW</b></td><td>退出驱动并回收扭矩，牵引力控制与扭矩矢量配合维持稳定。</td></tr>
+<tr><td><b>主动悬架</b></td><td>调节 CDC 阻尼，抑制制动俯仰与转向侧倾，保持车身平稳与传感器基座稳定。</td></tr>
+<tr><td><b>域控与冗余</b></td><td>完成闭环解算与 VDC 监控；链路异常时 50 ms 内由冗余接管，不丧失基本转向/制动能力。</td></tr>
+</table>
+</div>
+
+<div class='sec'>
+<h3><span class='num'>5.</span>关键状态量与指标（溯源作业 3）</h3>
+<table>
+<tr><th style='width:200px'>指标</th><th>本场景要求</th><th style='width:130px'>溯源需求</th></tr>
+<tr><td>端到端控制延迟</td><td>指令接收到执行器响应 ≤ 20 ms。</td><td>PR-01</td></tr>
+<tr><td>转角跟踪精度</td><td>前轮转角跟踪误差 ≤ ±0.1°。</td><td>PR-02</td></tr>
+<tr><td>执行器响应时间</td><td>扭矩 / 制动压力级响应 ≤ 10 ms。</td><td>PR-03</td></tr>
+<tr><td>冗余切换时间</td><td>主链路失效后冗余接管 ≤ 50 ms。</td><td>PR-04</td></tr>
+<tr><td>乘坐品质</td><td>减速度与加速度变化率受限，兼顾舒适与稳定。</td><td>PR-05</td></tr>
+</table>
+<div class='note'><b>作业关联：</b>本场景的系统构成溯源 <a href='../group1-chassis/index.html#tree'>作业 1 系统树</a>，相关方诉求溯源 <a href='../group2-brs-strs/index.html#stakeholders'>作业 2 StRS</a>，功能与性能指标溯源 <a href='../group3-assignment/index.html#syrs'>作业 3 SyRS</a>。</div>
+</div>
+</div>
+
+<footer><p>© 2026 金子惠 · 吉林大学汽车工程学院 · Complex Systems Engineering · Group Assignment 04</p></footer>
+</div>
+</body>
+</html>
